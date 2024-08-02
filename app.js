@@ -30,7 +30,7 @@ const db = mysql.createConnection({
 
     password: 'cimatec', // Substitua pela sua senha do MySQL
 
-    database: 'leads', //nome de  seu banco de dados
+    database: 'leads2', //nome de  seu banco de dados
 
 });
 
@@ -64,7 +64,7 @@ app.post('/submit', (req, res) => {
 
     const { nome, email, telefone } = req.body;
 
-    const query = 'INSERT INTO email (nome, email, telefone) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO email2 (nome2, email2, tel2) VALUES (?, ?, ?)';
 
     db.query(query, [nome, email, telefone], (err, result) => {
 

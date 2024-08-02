@@ -105,6 +105,73 @@
     </style>
 </head>
 <body>
+    <table>
+        <thead>
+            <tr>
+                <th> Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th> Ações</th>
+            </tr>
+        </thead>
+        <tbody id="datatable">           
+        </tbody>
+    </table>
+
+    <script>
+        function fetchData() {
+            fetch('/getData')
+            .then(response => response.json())
+            .then (data => {
+                const tableBody = document.getElementById('datatable')
+                tableBody.innerHTML = '';
+                data.forEach(row => {
+                    tableBody.innerHTML += `
+                    <tr>
+                            <td contenteditable='true'>${row.nome}</td>
+                            <td contenteditable='true'>${row.email}</td>
+                            <td contenteditable='true'>${row.telefone}</td>
+                            <td>
+                                <button class="icon-button" onclick="deleteData(${row.id})">🗑</button>
+                                <button class="icon-button" onclick="updateData(${row.id})">📝</button>    
+                            </td>
+                        </tr>
+                    `;
+                    
+                    function deleteData (id){
+                        fetch(`/delete/${id}`, { method: 'DELETE'})
+                        .then (response => response.json())
+                        .then (data => {
+                            alert(data.mensagem);
+                            fetchData();
+                        });
+                    }
+
+                    function updateData(id) {
+                        const row = docmunt.querySelector(`button[onclick="updateData(${id})"]`). parentNode.ParentNode;
+                        const nome = row.cells[0].textContent;
+                        const email = row.cells[1].textContent;
+                        const telefone = row.cells[2].textContent;
+                        fetch(`/update/${id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'applicantion/json'
+                            },
+                            body: json.stringily({nome, email, telefone})
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.mensage);
+                            fetchData();
+                        })
+                    }
+
+                    
+                })
+            })
+        }
+    </script>
+
     <div class="container">
         <h2>Formulário de Contatos</h2>
         <form action="/submit" method="POST">
